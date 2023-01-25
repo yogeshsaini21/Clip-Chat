@@ -9,9 +9,12 @@ import Signup from "./pages/signup"
 import About  from './pages/About';
 import Service from './pages/Services.jsx'
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   return (
    <BrowserRouter>
+   <ToastContainer position='bottom-center'/>
    <Routes>
     <Route path="/" element={<Home/>} />
     <Route path="/Login" element={<Login/>} />
