@@ -1,6 +1,7 @@
 package com.Application.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,9 +16,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.Application.security.CustomUserDetailService;
-import com.Application.security.JwtAuthenticationEntryPoint;
 import com.Application.security.JwtAuthenticationFilter;
 
 @Configuration
@@ -50,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeHttpRequests()
 		.antMatchers(PUBLIC_URLS).permitAll()
 		.antMatchers(HttpMethod.GET).permitAll()
+//		.antMatchers(HttpMethod.POST).permitAll()
 		.anyRequest()
 		.authenticated()
 		.and()
@@ -81,5 +84,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return super.authenticationManager();
 	}
 	
+	@Bean
+	public FilterRegistrationBean coresFilter() {
+		
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		
+		CorsConfiguration coresConfiguration = new CorsConfiguration();
+		coresConfiguration.setAllowCredentials(true);
+		coresConfiguration.addAllowedOriginPattern("*");
+		coresConfiguration.addAllowedHeader("Authorization");
+		coresConfiguration.addAllowedHeader("Content-Type");
+		coresConfiguration.addAllowedHeader("Accept");
+		coresConfiguration.addAllowedMethod("Accept");
+
+		coresConfiguration.addAllowedMethod("POST");
+
+		coresConfiguration.addAllowedMethod("GET");
+
+		coresConfiguration.addAllowedMethod("DELETE");
+
+		coresConfiguration.addAllowedMethod("PUT");
+
+		coresConfiguration.addAllowedMethod("OPTIONS");
+
+		coresConfiguration.setMaxAge(3600L);
+		
+		
+		source.registerCorsConfiguration("/**", coresConfiguration);
+		FilterRegistrationBean bean = new FilterRegistrationBean(new org.springframework.web.filter.CorsFilter(source));
+		return bean;
+	}
 	
 }
