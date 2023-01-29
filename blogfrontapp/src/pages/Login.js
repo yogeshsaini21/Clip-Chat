@@ -1,8 +1,60 @@
 import Base from "../component/Base";
 import React, { useState } from 'react';
 import {Row,Col,Container, Form, FormGroup, Label, Input, Button } from 'reactstrap';
-
+import { toast } from "react-toastify";
+import {loginUser} from "../services/user-service"
 const Login=()=>{
+
+  const [loginDetail , SetLoginDetail]=useState({
+    username:'',
+    password:''
+  })
+
+
+  const handleChange=(event,field)=>{
+      let actualValue =event.target.value ;
+      SetLoginDetail({
+        ...loginDetail , 
+        [field]:actualValue
+      }) 
+  }
+
+
+  const handleFormSubmit=(event)=>{
+      event.preventDefault();
+      console.log(loginDetail);
+
+      if(loginDetail.username.trim()==='' || loginDetail.password.trim()===''){
+        toast.error("Username or Password is required !!")
+        return
+      }
+
+       // Submit the data to server to generate token
+    loginUser(loginDetail).then((jwtTokenData)=>{
+      console.log("user login : ")
+      console.log(jwtTokenData)
+      toast.success("Login Success");
+
+    }).catch(error=>{
+      console.log(error);
+      if(error.response.status===400 || error.response.status===404){
+        toast.error(error.response.data.message)
+      }
+      toast.error("Something went wrong on server");
+    })
+
+  }
+
+    const handleReset=()=>{
+      SetLoginDetail({
+        username:'',
+        password:''
+      });
+    };
+
+   
+
+
     return(
         
     <Base>
@@ -11,7 +63,7 @@ const Login=()=>{
       <Col sm={{size:6,offset:3}} color='dark'>
          
     <div style={{border:"1px solid ",width:"auto" ,height:"auto",padding:"40px 20px 20px 20px"}} className="container"><h1 >Login</h1>
-        <Form>
+        <Form onSubmit={handleFormSubmit}>
         
       <FormGroup>
         <Label for="email">Email</Label>
@@ -20,7 +72,8 @@ const Login=()=>{
          
           id="email" 
           placeholder="Enter your email" 
-          
+          value={loginDetail.username}
+          onChange={(e)=>handleChange(e,'username')}
         />
       </FormGroup>
       <FormGroup>
@@ -30,14 +83,16 @@ const Login=()=>{
          
           id="password" 
           placeholder="Enter your password" 
+         value={loginDetail.password}
          
+         onChange={(e)=>handleChange(e,'password')}
         />
       </FormGroup>
      
 
       <Container className="text-center">
-          <Button color='primary'>Signup</Button>
-          <Button className='ms-2' color='secondary' type='reset'  >Reset</Button>
+          <Button  color='primary'>Login</Button>
+          <Button onClick={handleReset} className='ms-2' color='secondary' type='reset'  >Reset</Button>
       </Container>
     </Form>
     </div>
