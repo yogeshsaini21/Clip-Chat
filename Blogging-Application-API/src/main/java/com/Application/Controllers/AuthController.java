@@ -2,6 +2,7 @@ package com.Application.Controllers;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Application.Entities.User;
 import com.Application.Exceptions.ApiException;
 import com.Application.Payloads.JwtAuthRequest;
 import com.Application.Payloads.UserDto;
@@ -36,6 +38,8 @@ public class AuthController {
 	private UserService userService;
 	
 	@Autowired
+	private ModelMapper mapper;
+	@Autowired
 	private AuthenticationManager authenticationManager;
 
 	@PostMapping("/login")
@@ -46,8 +50,12 @@ public class AuthController {
 		this.authenticate(request.getUsername(),request.getPassword());
 		UserDetails userDetails=  this.userDetailsService.loadUserByUsername(request.getUsername());
 		String generateToken = this.jwtTokenHelper.generateToken(userDetails);
+		
+		
+		
 		JwtAuthResponse response = new JwtAuthResponse();
 		response.setToken(generateToken);
+		response.setUser(this.mapper.map((User)userDetails , UserDto.class));
 		return new ResponseEntity<JwtAuthResponse>(response, HttpStatus.OK);
 		
 	}

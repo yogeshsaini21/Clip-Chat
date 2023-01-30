@@ -45,9 +45,14 @@ public class UserDto {
 //	It doesn’t contain any white space.
 	
 //	@NotNull
-	@NotEmpty
+	@NotEmpty(message="about is required")
 	private String about;
 	 
 	private Set<RoleDto> roles = new HashSet<>();
+	
+	@JsonIgnore
+	public String getPassword() {
+		return this.password;
+	}
 
 }
