@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import {Row,Col,Container, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { toast } from "react-toastify";
 import {loginUser} from "../services/user-service"
+import { doLogin } from "../auth";
+
+
 const Login=()=>{
 
   const [loginDetail , SetLoginDetail]=useState({
@@ -30,9 +33,18 @@ const Login=()=>{
       }
 
        // Submit the data to server to generate token
-    loginUser(loginDetail).then((jwtTokenData)=>{
+    loginUser(loginDetail).then((data)=>{
       console.log("user login : ")
-      console.log(jwtTokenData)
+      console.log(data)
+
+      //save the data yo localStorage
+      doLogin(data,()=>{
+        console.log("login detail is saved to localStorage");
+
+        //redirect to user dashboard page
+
+      })
+
       toast.success("Login Success");
 
     }).catch(error=>{

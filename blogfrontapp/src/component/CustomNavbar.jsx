@@ -23,25 +23,26 @@ function CustomNavber(args) {
 
   return (
     <div>
-      <Navbar color='primary' dark expand="md" fixed='' {...args}>
+      <Navbar 
+      color='primary' 
+      dark 
+      expand="md"
+      className='px-5'
+       fixed='' {...args}>
+
         <NavbarBrand tag={ReactLink} to="/">
           MyBlogs</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="me-auto" navbar>
             <NavItem>
+              <NavLink tag={ReactLink}  to="/">Home</NavLink>
+            </NavItem>
+           
+            <NavItem>
               <NavLink tag={ReactLink}  to="/About">About</NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink tag={ReactLink} to="/login">
-                Login
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink tag={ReactLink} to="/Signup">
-                Signup
-              </NavLink>
-            </NavItem>
+           
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
                 more
@@ -54,8 +55,21 @@ function CustomNavber(args) {
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>
+
+          <Nav navbar>
+          <NavItem>
+              <NavLink tag={ReactLink} to="/login">
+                Login
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink tag={ReactLink} to="/Signup">
+                Signup
+              </NavLink>
+            </NavItem>
+          </Nav>
           
-          <NavbarText>Simple Text</NavbarText>
+          {/* <NavbarText>Simple Text</NavbarText> */}
         </Collapse>
       </Navbar>
     </div>
