@@ -1,6 +1,6 @@
-import { NavLink as ReactLink } from 'react-router-dom';
-
-import React, { useState } from 'react';
+import { NavLink as ReactLink, useNavigate } from 'react-router-dom';
+import { doLogout, getCurrentUserDetail, isLoggedIn } from "../auth";
+import React, { useEffect, useState } from 'react';
 import {
   Collapse,
   Navbar,
@@ -13,11 +13,30 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  NavbarText,
+ 
 } from 'reactstrap';
 
 function CustomNavber(args) {
+
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+
+  const [login, setLogin]= useState(false)
+  const [user , setUser] = useState(undefined)
+
+    useEffect(()=>{
+
+      setLogin(isLoggedIn())
+      setUser(getCurrentUserDetail())
+
+    },[login])
+
+    const logout=()=>{
+      doLogout(()=>{
+        setLogin(false);
+        navigate("/")
+      })
+    }
 
   const toggle = () => setIsOpen(!isOpen);
 
@@ -36,11 +55,14 @@ function CustomNavber(args) {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="me-auto" navbar>
             <NavItem>
-              <NavLink tag={ReactLink}  to="/">Home</NavLink>
+              <NavLink tag={ReactLink}  to="/">New Feed</NavLink>
             </NavItem>
            
             <NavItem>
               <NavLink tag={ReactLink}  to="/About">About</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink tag={ReactLink}  to="/service">Services</NavLink>
             </NavItem>
            
             <UncontrolledDropdown nav inNavbar>
@@ -48,16 +70,47 @@ function CustomNavber(args) {
                 more
               </DropdownToggle>
               <DropdownMenu right>
-                <DropdownItem tag={ReactLink} to="/service" >Services</DropdownItem>
                 <DropdownItem>Contact Us</DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>Youtube</DropdownItem>
+                <DropdownItem>Instagram</DropdownItem>
+                <DropdownItem>LinkedIn</DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>
 
           <Nav navbar>
-          <NavItem>
+                {
+
+                    login && (
+                      <>
+                      <NavItem>
+                      <NavLink tag={ReactLink} to="/user/profile-info">
+                        Profile
+                      </NavLink>
+                    </NavItem>
+                      <NavItem>
+                      <NavLink tag={ReactLink} to="/user/dashboard">
+                        {user.name}
+                      </NavLink>
+                    </NavItem>
+                  
+                       <NavItem>
+                      <NavLink onClick={logout}>
+                        Logout
+                      </NavLink>
+                    </NavItem>
+ 
+                      </>
+                     
+                    )
+
+                }
+
+                {
+                  !login && (
+                    <>
+                      <NavItem>
               <NavLink tag={ReactLink} to="/login">
                 Login
               </NavLink>
@@ -67,8 +120,12 @@ function CustomNavber(args) {
                 Signup
               </NavLink>
             </NavItem>
-          </Nav>
-          
+        
+                    </>
+                  )
+                }
+        
+        </Nav>
           {/* <NavbarText>Simple Text</NavbarText> */}
         </Collapse>
       </Navbar>

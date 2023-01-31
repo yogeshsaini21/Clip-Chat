@@ -4,6 +4,7 @@ import {Row,Col,Container, Form, FormGroup, Label, Input, Button } from 'reactst
 import { toast } from "react-toastify";
 import {loginUser} from "../services/user-service"
 import { doLogin } from "../auth";
+import { useNavigate } from "react-router-dom";
 
 
 const Login=()=>{
@@ -13,6 +14,7 @@ const Login=()=>{
     password:''
   })
 
+  const navigate =useNavigate();
 
   const handleChange=(event,field)=>{
       let actualValue =event.target.value ;
@@ -42,7 +44,7 @@ const Login=()=>{
         console.log("login detail is saved to localStorage");
 
         //redirect to user dashboard page
-
+        navigate("/user/dashboard")
       })
 
       toast.success("Login Success");

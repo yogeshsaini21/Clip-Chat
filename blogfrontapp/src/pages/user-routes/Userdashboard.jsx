@@ -1,12 +1,18 @@
 import React from "react";
+import AddPost from "../../component/AddPost";
+import Base from "../../component/Base";
+import { Container } from "reactstrap";
 
 const Userdashboard=()=>{
 
     return (
-        <div><h1>Welcome to User Dashboard</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere eum architecto a iure beatae nam. Aut, ipsa? Magnam aliquam reiciendis ut fugit, ad debitis iste vel soluta libero facere vitae totam modi assumenda obcaecati minus quae voluptatem! Tempora recusandae nesciunt quis, consequuntur voluptas ad laudantium numquam distinctio vitae, suscipit mollitia.</p>
+        <Base>
+        <Container>
+
+        </Container>
+            <AddPost></AddPost>
+        </Base>
         
-        </div>
     )
 }
 
