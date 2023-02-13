@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeHttpRequests()
 		.antMatchers(PUBLIC_URLS).permitAll()
 		.antMatchers(HttpMethod.GET).permitAll()
-//		.antMatchers(HttpMethod.POST).permitAll()
+		.antMatchers(HttpMethod.POST).permitAll()
 		.anyRequest()
 		.authenticated()
 		.and()
@@ -112,6 +112,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		source.registerCorsConfiguration("/**", coresConfiguration);
 		FilterRegistrationBean bean = new FilterRegistrationBean(new org.springframework.web.filter.CorsFilter(source));
+		
+		bean.setOrder(-110);	
 		return bean;
 	}
 	
