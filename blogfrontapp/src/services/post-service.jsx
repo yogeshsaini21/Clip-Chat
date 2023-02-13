@@ -1,6 +1,7 @@
-import {Base_Url, MyAxios} from "./helper";
+import {Base_Url, privateAxois} from "./helper";
 
 export const createPost=(postData)=>{
-    return MyAxios.post(Base_Url+`/user/${postData.userId}/category/${postData.categoryId}/posts`,postData)
+    console.log(postData);
+    return privateAxois.post(Base_Url+`/api/user/${postData.userId}/category/${postData.categoryId}/posts`,postData)
     .then((Response)=> Response.data);  
 };

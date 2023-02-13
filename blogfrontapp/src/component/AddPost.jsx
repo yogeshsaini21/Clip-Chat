@@ -3,11 +3,14 @@ import { Button, Card, CardBody, Container, Form, Input, Label } from "reactstra
 import { loadAllCategories } from "../services/categories-services";
 import JoditEditor from 'jodit-react';
 import { createPost as doCreatePost } from "../services/post-service";
+import {getCurrentUserDetail} from "../auth/index"
+import { toast } from "react-toastify";
 const AddPost = () => {
 
 
     const editor = useRef(null);
     const [content, setContent] = useState('');
+    const [user,setUser] = useState(undefined)
 
     const [post , setPost] = useState({
         title:'',
@@ -23,6 +26,7 @@ const AddPost = () => {
 
     useEffect(
         () => {
+            setUser(getCurrentUserDetail())
             loadAllCategories().then((data) => {
                 console.log(data)
                 setCategories(data)
@@ -45,30 +49,36 @@ const AddPost = () => {
 
     const createPost=(event)=>{
         event.preventDefault()
-        console.log(post)
+        // console.log(post)
 
         if(post.title.trim()===''){
-            alert("post title is required !! ")
+            toast.error("post title is required !! ")
             return
         }
         if(post.content.trim()===''){
-            alert("post content is required !!")
+            toast.error("post content is required !!")
             return
         }
         if(post.categoryId ===""){
-            alert("select some category !!")
+            toast.error("select some category !!")
             return
         }
 
 
         //submit the form to the server 
-
+        post[`userId`] = user.id;
+        // console.log(post)
         doCreatePost(post).then(data=>{
-            alert("post Created");
+            toast.success("post Created");
             console.log(post)
+            setPost({
+                title:'',
+                content:'',
+                categoryId:''
+            })
         }).catch((error)=>{
-            alert("error");
-            console.log(error);
+            toast.error("error");
+            // console.log(error);
         })
 
     }
@@ -80,7 +90,7 @@ const AddPost = () => {
 
                 <Card className="shadow-sm border-0 m-4">
                     <CardBody>
-                        {JSON.stringify(post)}
+                        {/* {JSON.stringify(post)} */}
                         <h3>What going in your mind ?</h3>
                         <Form onSubmit={createPost}>
                             <div className="my-3">
